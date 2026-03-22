@@ -1,0 +1,5 @@
+# IGNORE OUTPUT FILES FOR TESTING #
+
+*.bin
+*.elf
+*.o
