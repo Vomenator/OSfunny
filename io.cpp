@@ -1,27 +1,16 @@
 #include "io.hpp"
 #include "screen.hpp"
+#include "string.hpp"
 
-
-char getClineCLI(int Pline) {
+char getCinputCLI(int Pline, int linestart, int lineend) {                                  // this whole function is a mess pure spaghetti
     //int Sline = (cursor%80) + 80*Pline;
     int line = 79*Pline;
     //int maxline = cursor - 80*line ;
-    print("\n\n");
-    for (int i = 0; i < 80; i++) {
-        char fin[2] = {linedchar[i+line], '\0'};
-        //char fin[2] = {linedchar[0], '\0'};
-        print(fin);
+    for (int i = linestart; i < lineend; i++) {
+        //buffer[2] = {linedchar[i+line]};
+        stringstore(linedchar[i + line]);                                           // dont love this
     }
     return 'c';
-}
-
-// not in use
-void clearline() {
-    //char input[2] = {(static_cast<char>(sizeof(*str)), '\0')};                // to be diddled later, when print character issue is resolved
-    //print(input);
-    for (int i; i <= cursor; i++) {
-    //linedchar[i] = {};
-    }
 }
 
 void delay(long int count) {                    // this recieves input number up to 32 bits or 4 bytes long
@@ -57,6 +46,11 @@ char scancode_to_ascii(uint8_t scancode) {              // gets the scancode inp
     if (scancode >= sizeof(map.Sall)) return 0;     // if the scancode allowed is not within the scancode map returns 0
     if ((map.Sall[scancode].sentinel) != ';') return map.Sall[scancode].ascii; // else this will return the scancode value found within the table
     else {
-        return map.Sall[scancode].hex;
+        return 0x39;
     }
+}
+char scancode_to_hex(uint8_t scancode) {
+    scancodeMap map;
+    if (scancode >= sizeof(map.Sall)) return 0;     // if the scancode allowed is not within the scancode map returns 0
+    return map.Sall[scancode].hex;
 }

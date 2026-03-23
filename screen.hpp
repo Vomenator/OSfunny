@@ -14,3 +14,4 @@ void print(const char* str);
 void funnycolour(unsigned char colour, int Cblock);
 void tempColourOutput(int top);
 int getcursor();
+void printdebug(char input);

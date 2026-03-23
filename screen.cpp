@@ -58,3 +58,8 @@ void tempColourOutput(int top) {
         ia++;
     }
 }
+
+void printdebug(char input) {
+    char test[2] = {input, '\0'};
+    print(test);
+}

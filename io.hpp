@@ -1,7 +1,12 @@
+#pragma once
 #include "kernelforward.hpp"
 
 #define KEYBOARD_PORT 0x60              // port of keyboard input/output
 #define KEYBOARD_STATUS 0x64            // current status of keyboard/commands will read busy if sending data, good for detecting when its reciving input
+
+// keyboard status codes
+#define KEY_RELEASE 0x80
+#define KEY_BUSY 0x01
 
 extern char linedchar[2000];
 // will change this garbage in the future into an enum
@@ -37,9 +42,9 @@ struct scancodeMap{ // 0x00 is null, 0x01 is esc, 0x01d is left control, 0x2A is
 
 uint8_t keyboard_read_hold();                         
 char scancode_to_ascii(uint8_t scancode);
+char scancode_to_hex(uint8_t scancode);
 void delay(long int count);
 uint8_t inb(uint16_t port);
 
 // temp
-void clearline();
-char getClineCLI(int Pline);
+char getCinputCLI(int Pline, int linestart, int lineend);
