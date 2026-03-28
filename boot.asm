@@ -29,5 +29,5 @@ _gdt_flush:
     ret                                 ; returns to where it came from     
 
 section .bss
-    resb 16384
+    resb 163840
 stack_top: ; this is an empty memory location this allows the reserved bits to be uninterrupted and overwritten starting the program effectively after this mem address

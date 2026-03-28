@@ -17,22 +17,22 @@ void flushlinedchar(int wcount) {
     for (int i = 0; i <= wcount; i++) {
         linedchar[i] = {'\0'};
     }
-    bufferclear();
+    //bufferclear();
 }
 
 Command parsecommand(const char* input) {
     if (strcmp(input, "print") == 0) return CMD_PRINT;
     if (strcmp(input, "iden") == 0) return CMD_IDENTIFY;
     if (strcmp(input, "cls") == 0) return CMD_CLEAR;
-    if (strcmp(input, "\n") == 0) return CMD_UNKNOWN;
+    if (strcmp(input, "hello") == 0) return CMD_HELLO;
     return CMD_UNKNOWN;
 }
 
 void printCommand() {
     //strcmp(returnstringBuffer(5, ' '), "-n");
-    //if (strcmp(returnstringBuffer(5, ' '), "\0") == 0) return print("not enough args!\n");
-    if (strcmp(returnstringBuffer(5, ' '), "-n") != 0) return print("nirs\n");
-    print("error\n");
+    if (strcmp(returnstringBuffer(5, '\0'), " ") == 0) return print("not enough args!\n");
+    if (strcmp(returnstringBuffer(6, ' '), "-n") == 0) return print("nirs\n");
+    print("error use of print function\n");
 }
 
 void commandCheck(const char* input) {
@@ -44,15 +44,24 @@ void commandCheck(const char* input) {
             clear_screen();
             break;
         case CMD_PRINT:
-        printCommand();
+            printCommand();
+            break;
+        case CMD_HELLO:
+            print("HI THERE!\n");
             break;
         default:
             print("invalid command!\n");
     }
+    bufferclear();
+}
+
+void linestartC() {
+    print(">: ");
 }
 
 
 void input() {
+    linestartC();
     int wcount = 0;
     cursorNew = getcursor();
     uint8_t scancode;
@@ -78,10 +87,8 @@ void input() {
             }
             if (scancode_to_hex(scancode) == 0x1c && wcount > 0) {
                 getCinputCLI(0, 0, 80);
-                //print("\nhi: ");
-                //print(returnstringBuffer(6, ' '));
-                //print("\n");
                 commandCheck(returnstringBuffer(0, ' '));
+                linestartC();
                 cursorNew = getcursor();
                 flushlinedchar(wcount);
                 wcount = 0;
@@ -94,9 +101,5 @@ void input() {
 void commandprompt() {
     clear_screen();
     print("\n");
-   // printdebug(inttochar(10));
-    printdebug(inttochar(100));
-    print(returnstringBuffer());
-    bufferclear();
     input();
 }

@@ -10,7 +10,6 @@
 
 extern char buffer[STRING_MAX];
 extern int bufftrack;
-extern char Tbuff[64];
 
 
 

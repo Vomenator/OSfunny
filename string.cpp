@@ -16,6 +16,12 @@ void stringstoreN(const char input) {
 
 void bufferclear() {
     bufftrack = 0;
+    int i = 0;
+
+    while (i < 63) {
+        Tbuff[i] = {'\0'};
+        i++;
+    }
 }
 
 char* returnstringBuffer() { 
@@ -23,15 +29,28 @@ char* returnstringBuffer() {
     return charstore;
 }
 
-char* returnstringBuffer(int newtrack, char ascii) {
-    //printdebug(charstore[newtrack]);
+char* returnDstringBuffer(int newtrack, char ascii) {
     int i = 0;
-    for(; charstore[newtrack] != ascii; newtrack++) {            //charstore[newtrack] != ascii
+    int lopi = 1;
+    for(; (charstore[newtrack] != ascii && charstore[newtrack] != '\0' && charstore[newtrack] != '\n') && i < 64; newtrack++) {            //charstore[newtrack] != ascii
+        //print("_");
         Tbuff[i] = charstore[newtrack];
         i++;
+        lopi++;
     }
-    //Tbuff[i] = '\0';
+    Tbuff[newtrack] = '\0';
+    if (lopi == 1) {
+        Tbuff[0] = 'f';
+        Tbuff[1] = '\0';
+    }
+    //print(returnstringBuffer());
     return Tbuff;
+}
+
+char* returnstringBuffer(int newtrack, char ascii) {
+    bufferclear();
+    char* output = returnDstringBuffer(newtrack, ascii);
+    return output;
 }
 
 // not in use
@@ -59,18 +78,19 @@ int numlen(int input) {
 }
 
 int strcmp(const char* a, const char* b) {
-    int i = 0;
-    int lena = (strlen(a)-1);
+    //int i = 0;
+    int lena = strlen(a);
     int lenb = strlen(b);
-    
-    for (int i = 0; i < lena; i++){
-        //if (a[i] != b[i]) return 10;
-        if (*a != *b) return 1;
-        //print("passed");
-        a++;
-        b++;
+    if (lena == lenb) {
+        for (int i = 0;i < lena; i++){
+            //if (a[i] != b[i]) return 10;
+            if (*a != *b) return 1;
+            a++;
+            b++; 
+        }
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 char sinttochar(int input) {
