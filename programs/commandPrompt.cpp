@@ -25,6 +25,7 @@ void linestartC() {
 
 
 void input() {
+    bufferclear();
     linestartC();
     int wcount = 0;
     cursorNew = getcursor();

@@ -1,5 +1,6 @@
 #include "../vga/legacy/screen.hpp"
-
+#include "../types/kerneltypes.hpp"
+#include "../mem/memB.hpp"
 
 // GDT entry structure
 struct GDTEntry {                               
@@ -46,13 +47,10 @@ extern "C" void kmain() {
     print("GDT initialized.\n");
     print("\n");
     tempColourOutput(8);
+    kmeminit(0x3, Bsize::MB); // Example: Initialize memory management with 128 MB starting at 3 MB
 
     // initialises the commandprompt function
     commandprompt();
     for(;;) __asm__ volatile("hlt");
-}
-
-void shutdown() {
-    // to be implemented later, will use ACPI to shutdown the system, but for now just an infinite loop
-    while (1) __asm__ volatile("hlt");
+    return;
 }
