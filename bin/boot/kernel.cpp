@@ -47,7 +47,7 @@ extern "C" void kmain() {
     print("GDT initialized.\n");
     print("\n");
     tempColourOutput(8);
-    kmeminit(0x3, Bsize::MB); // Example: Initialize memory management with 128 MB starting at 3 MB
+    kmeminit(3, Bsize::MB); // Example: Initialize memory management with 128 MB starting at 3 MB
 
     // initialises the commandprompt function
     commandprompt();

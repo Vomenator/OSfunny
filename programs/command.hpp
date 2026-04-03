@@ -30,29 +30,21 @@ inline void printCommand() {                                                    
 }
 
 inline void getmeminfo() {
-    print("Memory Information:\n");
-    inttochar(totalMemory); // Debug output of total memory in MB
-    print(returnstringBuffer());
-    print(" MB total.\n");
-    inttochar(freeMemory/ Bsize::KB); // Debug output of free memory in KB
-    print(returnstringBuffer());
-    print(" KB free.\n");
-    inttochar(usedMemory / Bsize::KB); // Debug output of used memory in KB
-    print(returnstringBuffer());
-    print(" KB used.\n");
+    print("Memory Information:\n   ");
+    print(inttochar(totalMemory / Bsize::KB));
+    print(" KB total\n   ");
+    print(inttochar(freeMemory / Bsize::KB));
+    print(" KB free.\n   ");
+    print(inttochar((usedMemory) / Bsize::KB));
+    print(" KB used\n");
 
-    print("HEAP information:\n");
-    inttochar(heapsize / Bsize::KB); // Debug output of heap size in KB
-    print(returnstringBuffer());
-    print(" KB available for heap. \n");
-    print( "heap is between: ");
-    inttochar(heapstart/ Bsize::KB); // Debug output of heap start address in KB
-    print(returnstringBuffer());
-    print(" KB and ");
-    bufferclear();
-    inttochar(heapEND / Bsize::KB); // Debug output of heap end address in KB
-    print(returnstringBuffer());
-    print(" KB.\n");      
+    print("HEAP information:\n   ");
+    print(inttochar(heapsize / Bsize::MB));
+    print(" MB total\n   ");
+    print(inttochar(heapstart / Bsize::KB));
+    print(" KB free.\n   ");
+    print(inttochar((heapEND) / Bsize::KB));
+    print( " KB used\n");        
 }
 
 Command parsecommand(const char* input) {

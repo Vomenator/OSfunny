@@ -6,6 +6,7 @@ ASM = nasm
 OBCY = objcopy
 
 CFLAGS = -ffreestanding -fno-exceptions -fno-rtti -fno-stack-protector -O2 -m32
+FCFLAGS = -ffreestanding -fno-exceptions -fno-rtti -fno-stack-protector -O2 -m32 -fpermissive
 OBJFLAGS = -O elf32-i386
 
 BIN_DIR = bin/
@@ -52,6 +53,7 @@ $(OBJ_DIR)memB.o: $(MEMF)memB.cpp
 
 runqemu:
 	qemu-system-i386 -kernel kernel.elf -d guest_errors -D qemu.log
+	
 
 clean:
 	rm -f *.o *.bin

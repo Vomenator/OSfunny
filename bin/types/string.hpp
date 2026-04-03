@@ -19,4 +19,4 @@ char* returnstringBuffer(int newtrack, char ascii);
 void clearline();
 int strcmp(const char* a, const char* b);
 int strlen(const char* str);
-char inttochar(int input);
+char* inttochar(int input);

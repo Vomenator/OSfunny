@@ -53,7 +53,7 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     }
     memTRKalloc(INIT_STACK);
 
-    print("Memory management initialized.\n");
+    /*print("Memory management initialized.\n");
     inttochar(memsize); // Debug output of free memory in KB
     print(returnstringBuffer());
     print(" MB total.\n");
@@ -63,7 +63,14 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     inttochar(usedMemory / Bsize::KB); // Debug output of used memory in KB
     print(returnstringBuffer());
     print(" KB used.\n");
-    bufferclear();    
+    bufferclear();  */
+    print("Memory Management Intialised. \n   ");
+    print(inttochar(memsize));
+    print(" MB total\n   ");
+    print(inttochar(freeMemory / Bsize::MB));
+    print(" KB free.\n   ");
+    print(inttochar((usedMemory) / Bsize::KB));
+    print( " KB used\n");
 
     heapstart = 0x100000; // Example starting address for the heap (1 MB)
     heapsize = (memsize * Bunit) - heapstart; // Size of the heap (total memory minus the starting address)
@@ -76,7 +83,7 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     initialBlock->prev = NULL;
     heapEND = heapstart + heapsize; // Set tail to the end of the memory region
 
-    print("HEAP Memory initialized.\n");
+    /*print("HEAP Memory initialized.\n");
     inttochar(heapsize / Bsize::KB); // Debug output of heap size in KB
     print(returnstringBuffer());
     print(" KB available for heap. \n");
@@ -87,7 +94,20 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     bufferclear();
     inttochar(heapEND / Bsize::KB); // Debug output of heap end address in KB
     print(returnstringBuffer());
-    print(" KB.\n");                                                                                                  
+    print(" KB.\n");   */
+    
+    print( "\nHEAP Memory Intialised.\n   ");
+    print(inttochar(heapsize / Bsize::KB));
+    print( " KB available for heap \n");
+    print( " heap is between: ");
+    print(inttochar(heapstart / Bsize::KB));
+    print( " KB and ");
+    print(inttochar(heapEND /Bsize::KB));
+    print( " KB used ");
+
+
+
+    
     // Initialize memory management structures here
     // For example, set up a bitmap for tracking used/free memory blocks
     // or initialize a linked list of free memory blocks.

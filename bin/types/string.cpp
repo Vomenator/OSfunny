@@ -3,6 +3,7 @@
 char charstore[STRING_MAX];
 char Tbuff[64];
 int bufftrack = 0;
+char* outputinttochar;
 
 void stringstore(const char input) {
     charstore[bufftrack] = input;
@@ -128,29 +129,23 @@ char sinttochar(int input) {
         output = scancode_to_ascii(0x0B);
         break;
     default:
-        output = '\0';
+        output;
     }
     return output;
 }
 
-char inttochar(int input) {
+
+char* inttochar(int input) {
     int len = numlen(input);
     int i = 0;
     int p10 = 1;
-    uint8_t output = {};
-    while (len > i) {
-        output = (input/p10) %10;
-        bufftrack = (len - 1) - i;
+    uint8_t result = {};
+    while (i < len) {
+        result = (input/p10) %10;
         p10 *= 10;
-        stringstoreN(sinttochar(output));
-        //print("\n");
-        //printdebug(sinttochar(output));
-        //print("\n");
-        //printdebug(sinttochar(bufftrack));
+        outputinttochar[(len - 1) - i] = sinttochar(result);
         i++;
     }
-    bufftrack = len;
-    //printdebug(sinttochar(bufftrack));
-    //printdebug(charstore[]);
-    return '\0';
+    outputinttochar[i] = '\0';
+    return outputinttochar;
 }
