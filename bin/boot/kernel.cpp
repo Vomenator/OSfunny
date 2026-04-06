@@ -2,6 +2,30 @@
 #include "../types/kerneltypes.hpp"
 #include "../mem/memB.hpp"
 
+void kernel_panic(uint32_t error) {
+    clear_screen();
+    print("\n\n********************");
+    print("****KERNEL PANIC****\n");
+    print("********************\n");
+
+    switch(error) {
+        case 0:
+            print("\n\n**UKNOWN ERROR**");
+            break;
+        case 1:
+            print("\n\n**GDT INITALISATION ERROR**");
+            break;
+        case 2:
+            print("\n\n**MEMORY INITALISATION ERROR**");
+            break;
+        case 3:
+            print("\n\n**HEAP ALLOCATION FAULT**");
+            break;
+    }
+    for(;;) __asm__ volatile("hlt");
+    return;
+}
+
 // GDT entry structure
 struct GDTEntry {                               
     unsigned short limit_low;           //setting values 2 BYTES
@@ -20,6 +44,7 @@ struct GDTPointer {
 GDTEntry gdt[3];                        // initialises the structures
 GDTPointer gdtp;
 
+
 void gdt_set_entry(int i, unsigned int base, unsigned int limit, unsigned char access, unsigned char gran) {    // this sets the table, ie, i acts as an index
     gdt[i].base_low    = base & 0xFFFF;         // this ignores the left side of the 32 bit system effectively restricting it to using 16 bits using the limit
     gdt[i].base_mid    = (base >> 16) & 0xFF;   // shifts it over by 16 bits in which now it will get the last 8 bits, i.e if its 'ab 12 cc dd' it would then be '00 00 ab 12'
@@ -31,24 +56,25 @@ void gdt_set_entry(int i, unsigned int base, unsigned int limit, unsigned char a
 
 extern "C" void gdt_flush(unsigned int);  // in boot.asm
 
-void init_gdt() {
+bool init_gdt() {
     gdtp.limit = (sizeof(GDTEntry) * 3) - 1;  // 8 bytes * 3 = 24-1 = 23bytes, but it can store up to 65536 -1 bits or 8192 bytes, finally 8 bytes per entry 1024 entries
     gdtp.base  = (uint32_t)&gdt;
     gdt_set_entry(0, 0, 0,          0,    0);    // null
     gdt_set_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // code , the limit is the segmentation for what its allowed to access
     gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // data
     gdt_flush((uint32_t)&gdtp);
+    return true;
 }
 
 extern "C" void kmain() {
     clear_screen();
     print("MyOS kernel booted!\n");
-    init_gdt();
+    if (!init_gdt()) kernel_panic(1);
     print("GDT initialized.\n");
     print("\n");
     tempColourOutput(8);
-    kmeminit(3, Bsize::MB); // Example: Initialize memory management with 128 MB starting at 3 MB
-
+    if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
+    //if(kmemalloc(100, 1))
     // initialises the commandprompt function
     commandprompt();
     for(;;) __asm__ volatile("hlt");

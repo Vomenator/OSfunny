@@ -13,6 +13,7 @@ enum Command {
     CMD_HELLO,
     CMD_PRINT,
     CMD_MEMINFO,
+    CMD_HEAPDUMP,
     CMD_UNKNOWN
 };
 
@@ -49,9 +50,11 @@ inline void getmeminfo() {
 
 Command parsecommand(const char* input) {
     if (strcmp(input, "print") == 0) return CMD_PRINT;
+
     if (strcmp(input, "iden") == 0) return CMD_IDENTIFY;
     if (strcmp(input, "cls") == 0) return CMD_CLEAR;
     if (strcmp(input, "memi") == 0) return CMD_MEMINFO;
+    if (strcmp(input, "heapdump") == 0) return CMD_HEAPDUMP;
     if (strcmp(input, "hello") == 0) return CMD_HELLO;
     if (strcmp(input, "exit") == 0) return CMD_EXIT;
     return CMD_UNKNOWN;
@@ -73,6 +76,9 @@ inline void commandCheck(const char* input) {
             break;
         case CMD_MEMINFO:
             getmeminfo();
+            break;
+        case CMD_HEAPDUMP:
+            heap_dump();
             break;
         case CMD_EXIT:
             exit(0);

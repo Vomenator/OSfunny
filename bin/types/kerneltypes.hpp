@@ -41,3 +41,4 @@ struct CPUInfo {
 };
 
 void commandprompt();
+void kernel_panic(uint32_t error);
