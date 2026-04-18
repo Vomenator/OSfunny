@@ -15,6 +15,8 @@ TYPESF = bin/types/
 VGAF = bin/vga/legacy/
 MEMF = bin/mem/
 
+COMMANDSF = bin/commands/
+
 OBJ_DIR = out/obj/
 PROGF = programs/
 
@@ -25,8 +27,8 @@ run:kernel.bin finalise_compile
 finalise_compile: $(OBJ_DIR)kernel.bin
 	$(OBCY) $(OBJFLAGS) $(OBJ_DIR)kernel.bin kernel.elf
 
-kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)screen.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o
-	$(LD) -m i386pe -T linker.ld -o $(OBJ_DIR)kernel.bin $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)screen.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o
+kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)screen.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o
+	$(LD) -m i386pe -T linker.ld -o $(OBJ_DIR)kernel.bin $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)screen.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o
 	@echo "Kernel compiled successfully!"
 
 $(OBJ_DIR)boot.o: $(BOOTF)boot.asm
@@ -49,6 +51,9 @@ $(OBJ_DIR)string.o: $(TYPESF)string.cpp
 
 $(OBJ_DIR)memB.o: $(MEMF)memB.cpp
 	$(CC) $(CFLAGS) -c $(MEMF)memB.cpp -o $(OBJ_DIR)memB.o
+
+$(OBJ_DIR)hexdump.o: $(COMMANDSF)hexdump.cpp
+	$(CC) $(CFLAGS) -c $(COMMANDSF)hexdump.cpp -o $(OBJ_DIR)hexdump.o
 
 runqemu:
 	qemu-system-i386 -kernel kernel.elf -d guest_errors -D qemu.log

@@ -5,6 +5,8 @@
 #include "../bin/types/string.hpp"
 #include "../bin/mem/memB.hpp"
 
+// foward delcarations
+void hexdump(const void* data, size_t size, int width = 2);
 
 enum Command {
     CMD_EXIT,
@@ -13,6 +15,7 @@ enum Command {
     CMD_HELLO,
     CMD_PRINT,
     CMD_MEMINFO,
+    CMD_HEXDUMP,
     CMD_UNKNOWN
 };
 
@@ -29,7 +32,16 @@ inline void printCommand() {                                                    
     print("error use of print function\n");
 }
 
-inline void getmeminfo() {
+inline void hexdumpcommand() {                                                                           // TO BE MOVED LATER, AS THIS NEED TO BE WITH ITS FAMILY <3
+    //strcmp(returnstringBuffer(5, ' '), "-n");
+    if (strcmp(returnstringBuffer(5, '\0'), " ") == 0) return print("not enough args!\n");
+    if (strcmp(returnstringBuffer(8, ' '), "-S") == 0) {
+        int start = 0;
+    }
+    print("error use of hexdump function\n");
+}
+                                                                                        // will change this terrible system once file directories are existent, because then
+inline void getmeminfo() {                                                              // i can base it off file name and decentralise this process but it works for now
     print("Memory Information:\n");
     inttochar(totalMemory); // Debug output of total memory in MB
     print(returnstringBuffer());
@@ -61,6 +73,7 @@ Command parsecommand(const char* input) {
     if (strcmp(input, "cls") == 0) return CMD_CLEAR;
     if (strcmp(input, "memi") == 0) return CMD_MEMINFO;
     if (strcmp(input, "hello") == 0) return CMD_HELLO;
+    if (strcmp(input, "hexdump") == 0) return CMD_HEXDUMP;
     if (strcmp(input, "exit") == 0) return CMD_EXIT;
     return CMD_UNKNOWN;
 }
@@ -81,6 +94,10 @@ inline void commandCheck(const char* input) {
             break;
         case CMD_MEMINFO:
             getmeminfo();
+            break;
+        case CMD_HEXDUMP:
+            //hexdump((void*)0x7FFFFFF, 256); // Example: Dump the first 256 bytes of the heap
+            hexdumpcommand();
             break;
         case CMD_EXIT:
             exit(0);
