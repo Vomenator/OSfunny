@@ -28,8 +28,25 @@ void putint(uint16_t num) {
     // need bit manipulation
 }
 
-void print(const char* str) {                   // this gathers the string using a character pointer and making it constant
-    while (*str) putchar(*str++);
+/*void print(const char* str ...) {                   // this gathers the string using a character pointer and making it constant
+    __builtin_va_list args;
+    __builtin_va_start(args, str);
+    for (int i; i <= sizeof(*str); i++) {
+        if (*str == '%')
+        switch(*str++) {
+            case 'd':
+            uint32_t c = __builtin_va_arg(args, uint32_t);
+
+            break;
+        }
+        putchar(*str);
+        //if (*str == ' ' || *str == '\n') *str++;
+    }
+    __builtin_va_end(args);
+}*/
+
+void print(const char* str) {
+    while(*str) putchar(*str++);
 }
 
 void funnycolour(unsigned char colour, int Cblock) {;                    // last bits need to be 00 for data to be parsed correctly
@@ -60,6 +77,6 @@ void tempColourOutput(int top) {
 }
 
 void printdebug(char input) {
-    char test[2] = {input, '\0'};
-    print(test);
+    char test[2] = {input, '\0'};           //USELESSS FOR NOW
+    //print(test);
 }

@@ -10,6 +10,7 @@ static int cursor = 0;                                                  // stati
 
 void clear_screen();
 void putchar(char c);
+//void print(const char* str ...);
 void print(const char* str);
 void funnycolour(unsigned char colour, int Cblock);
 void tempColourOutput(int top);
