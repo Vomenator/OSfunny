@@ -1,19 +1,30 @@
 global _start
 global _gdt_flush
-extern _kmain
+extern kmain
 
 section .multiboot
-    dd 0x1BADB002               ; this is the magic number i.e the mem entry point into multiboot
-    dd 0x00                     ; im not requesting additional options from GRUB
-    dd -(0x1BADB002 + 0x00)     ; grub likes to check if the data checks out otherwise it may ignore it
+align 4
+    dd 0x1BADB002
+    dd 0x00000004           ; add 4 at the end later so i can do funny with it
+    dd -(0x1BADB002 + 0x00000004)
+    dd 0                     ; this is the magic number for the video mode, it puts it to linear mode
+    dd 1024                     ; this is the width of the screen, in pixels, which is 640
+    dd 768                     ; this is the height of the screen, in pixels, which is 480
+    dd 32                     ; this is the bits per pixel, which is 16
 
 section .text
-
+;[bits 16]
+[bits 32]
 _start:
-    cli                         ; this disables interrupts which makes sure this squence is ran uninterrupted
-    mov esp, stack_top          ; move stack top to the esp register
-    call _kmain                 ; begins the kmain function within the kernel
-    ;hlt                         ; once complete halts the function of the CPU 
+    mov word [0xB8000], 0x0741  ; A - _start reached
+    cli
+    mov word [0xB8002], 0x0742  ; B - after cli
+    mov esp, stack_top
+    mov word [0xB8004], 0x0743  ; C - after stack setup
+    push ebx
+    mov word [0xB8006], 0x0744  ; D - after push
+    call kmain
+    mov word [0xB8008], 0x0745  ; E - after kmain (should never reach)                   ; once complete halts the function of the CPU
 
 _gdt_flush:
     mov eax, [esp+4]            ; this ignores 4 bytes of memory and moves it to eax

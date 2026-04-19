@@ -1,12 +1,20 @@
 #include "../vga/legacy/screen.hpp"
 #include "../types/kerneltypes.hpp"
-#include "../mem/memB.hpp"
+//#include "../mem/memB.hpp"
+#include "../vga/new/newVGA.hpp"
+
+
+//uint16_t* fb;
 
 void kernel_panic(uint32_t error) {
     clear_screen();
-    print("\n\n********************");
-    print("****KERNEL PANIC****\n");
-    print("********************\n");
+    print("\n\n");
+    print("********************");
+    print("\n");
+    print("****KERNEL PANIC****");
+    print("\n");
+    print("********************");
+    print("\n");
 
     switch(error) {
         case 0:
@@ -21,10 +29,16 @@ void kernel_panic(uint32_t error) {
         case 3:
             print("\n\n**HEAP ALLOCATION FAULT**");
             break;
+        case 4:
+            print("\n\n**VGA MODE ERROR**");
+            break;
+        case 5:
+            print("\n\n**framebufferflag not set**");
+            break;
     }
     for(;;) __asm__ volatile("hlt");
     return;
-}
+} 
 
 // GDT entry structure
 struct GDTEntry {                               
@@ -54,7 +68,7 @@ void gdt_set_entry(int i, unsigned int base, unsigned int limit, unsigned char a
     gdt[i].access      = access;                                // this determines what can access it, if it has the same access code it will be able to access the other memory of the same code, like an pass
 }
 
-extern "C" void gdt_flush(unsigned int);  // in boot.asm
+extern "C" void _gdt_flush(unsigned int);  // in boot.asm
 
 bool init_gdt() {
     gdtp.limit = (sizeof(GDTEntry) * 3) - 1;  // 8 bytes * 3 = 24-1 = 23bytes, but it can store up to 65536 -1 bits or 8192 bytes, finally 8 bytes per entry 1024 entries
@@ -62,21 +76,25 @@ bool init_gdt() {
     gdt_set_entry(0, 0, 0,          0,    0);    // null
     gdt_set_entry(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // code , the limit is the segmentation for what its allowed to access
     gdt_set_entry(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // data
-    gdt_flush((uint32_t)&gdtp);
+    _gdt_flush((uint32_t)&gdtp);
     return true;
 }
 
-extern "C" void kmain() {
-    clear_screen();
-    print("MyOS kernel booted!\n");
-    if (!init_gdt()) kernel_panic(1);
-    print("GDT initialized.\n");
-    print("\n");
-    tempColourOutput(8);
-    if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
+extern "C" void kmain(multiboot_info* mb) {
+    //if (mb->framebuffer_addr == 0) for(;;);
+    VBEModeInfo* vbe = (VBEModeInfo*)mb->vbe_mode_info;
+    VGAINIT(vbe);
+    colourscreen(0, 0, 255); // blue screen
+    put_pixel(100, 100, 0xFF, 0x00, 0x00); // red pixel at 100,100
+    //print("MyOS kernel booted!\n");
+    //if (!init_gdt());// kernel_panic(1);
+    //print("GDT initialized.\n");
+    //print("\n");
+    //tempColourOutput(8);
+    //if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
     //if(kmemalloc(100, 1))
     // initialises the commandprompt function
-    commandprompt();
+    //commandprompt();
     for(;;) __asm__ volatile("hlt");
     return;
 }

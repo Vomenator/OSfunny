@@ -5,3 +5,6 @@
 *.o
 *.log
 qemu.log
+*.iso
+*.log
+out/
