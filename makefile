@@ -37,13 +37,13 @@ grub:
 #elfontheshelf_conversion: $(OBJ_DIR)kernel.bin grub
 #	$(OBCY) $(OBJFLAGS) $(OBJ_DIR)kernel.bin $(GRUBBY)boot/kernel.elf
 
-#kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o $(OBJ_DIR)screen.o
-#	$(LD) -m i386pe -T linker.ld -o $(OBJ_DIR)kernel.bin $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)screen.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o
-#	@echo "Kernel compiled successfully!"
-
-kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)screen.o
-	$(LD) -m elf_i386 -T linker.ld -o $(GRUBBY)boot/kernel.elf $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)screen.o
+kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)VBEkernelcharacters.o $(OBJ_DIR)VBEkernelspecial.o
+	$(LD) -m elf_i386 -T linker.ld -o $(GRUBBY)boot/kernel.elf $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)VBEkernelcharacters.o $(OBJ_DIR)VBEkernelspecial.o
 	@echo "Kernel compiled successfully!"
+
+#kernel.bin: $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o $(OBJ_DIR)screen.o $(OBJ_DIR)VBEkernelcharacters.o $(OBJ_DIR)VBEkernelspecial.o
+#	$(LD) -m elf_i386 -T linker.ld -o $(GRUBBY)boot/kernel.elf $(OBJ_DIR)boot.o $(OBJ_DIR)kernel.o $(OBJ_DIR)commandPrompt.o $(OBJ_DIR)newVGA.o $(OBJ_DIR)input.o $(OBJ_DIR)string.o $(OBJ_DIR)memB.o $(OBJ_DIR)hexdump.o $(OBJ_DIR)screen.o $(OBJ_DIR)VBEkernelcharacters.o $(OBJ_DIR)VBEkernelspecial.o
+#	@echo "Kernel compiled successfully!"
 
 $(OBJ_DIR)boot.o: $(BOOTF)boot.asm
 	$(ASM) -f elf32 $(BOOTF)boot.asm -o $(OBJ_DIR)boot.o
@@ -54,6 +54,12 @@ $(OBJ_DIR)screen.o: $(VGAF)screen.cpp
 
 $(OBJ_DIR)newVGA.o: $(VGANEWF)newVGA.cpp
 	$(CC) $(CFLAGS) -c $(VGANEWF)newVGA.cpp -o $(OBJ_DIR)newVGA.o
+
+$(OBJ_DIR)VBEkernelcharacters.o: $(VGANEWF)VBEkernelcharacters.cpp
+	$(CC) $(CFLAGS) -c $(VGANEWF)VBEkernelcharacters.cpp -o $(OBJ_DIR)VBEkernelcharacters.o
+
+$(OBJ_DIR)VBEkernelspecial.o: $(VGANEWF)VBEkernelspecial.cpp
+	$(CC) $(CFLAGS) -c $(VGANEWF)VBEkernelspecial.cpp -o $(OBJ_DIR)VBEkernelspecial.o
 
 
 $(OBJ_DIR)input.o: $(IOF)input.cpp

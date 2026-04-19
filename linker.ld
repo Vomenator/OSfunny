@@ -17,6 +17,10 @@ SECTIONS
     .data ALIGN(4096) :
     {
         *(.data)
+    }
+    
+    .rodata ALIGN(4096) :
+    {
         *(.rodata*)
     }
 
@@ -24,13 +28,5 @@ SECTIONS
     {
         *(COMMON)
         *(.bss)
-    }
-
-    /DISCARD/ :
-    {
-        *(.eh_frame)
-        *(.eh_frame_hdr)
-        *(.reloc)
-        *(.comment)
     }
 }

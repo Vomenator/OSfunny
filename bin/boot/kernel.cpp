@@ -1,4 +1,4 @@
-#include "../vga/legacy/screen.hpp"
+//#include "../vga/legacy/screen.hpp"
 #include "../types/kerneltypes.hpp"
 //#include "../mem/memB.hpp"
 #include "../vga/new/newVGA.hpp"
@@ -6,34 +6,32 @@
 
 //uint16_t* fb;
 
+uint8_t SCREENPADDING = 8; // this is the padding between the edge of the screen and the start of the text, in pixels
+
 void kernel_panic(uint32_t error) {
-    clear_screen();
-    print("\n\n");
-    print("********************");
-    print("\n");
-    print("****KERNEL PANIC****");
-    print("\n");
-    print("********************");
-    print("\n");
+    //clear_screen();
+    print("********************", SCREENPADDING, 5, 0xFF, 0x00, 0x00, 0x00); // red color
+    print("****KERNEL PANIC****", SCREENPADDING, 6, 0xFF, 0x00, 0x00, 0x00);
+    print("********************", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
 
     switch(error) {
         case 0:
-            print("\n\n**UKNOWN ERROR**");
+            print("**UKNOWN ERROR**", SCREENPADDING, 9, 0xFF, 0x00, 0x00, 0x00);
             break;
         case 1:
-            print("\n\n**GDT INITALISATION ERROR**");
+            print("**GDT INITALISATION ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
             break;
         case 2:
-            print("\n\n**MEMORY INITALISATION ERROR**");
+            print("**MEMORY INITALISATION ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
             break;
         case 3:
-            print("\n\n**HEAP ALLOCATION FAULT**");
+            print("**HEAP ALLOCATION FAULT**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
             break;
         case 4:
-            print("\n\n**VGA MODE ERROR**");
+            print("**VGA MODE ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
             break;
         case 5:
-            print("\n\n**framebufferflag not set**");
+            print("**framebufferflag not set**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
             break;
     }
     for(;;) __asm__ volatile("hlt");
@@ -84,8 +82,15 @@ extern "C" void kmain(multiboot_info* mb) {
     //if (mb->framebuffer_addr == 0) for(;;);
     VBEModeInfo* vbe = (VBEModeInfo*)mb->vbe_mode_info;
     VGAINIT(vbe);
-    colourscreen(0, 0, 255); // blue screen
-    put_pixel(100, 100, 0xFF, 0x00, 0x00); // red pixel at 100,100
+    //colourscreen(0, 0, 255); // blue screen
+    //put_pixel(100, 100, 0xFF, 0x00, 0x00); // red pixel at 100,100
+    //kcharacterA(100, 100, 0xFF, 0xFF, 0xFF, 0x00); // white 'A' at 100,100 also 0x00 was added cuz intelisense is smoking something
+    //kernel::print::characterTest(100, 100, 0xFF, 0xFF, 0xFF, 0x00);
+    print("MyOS kernel booted!", SCREENPADDING, 2, 0xFF, 0xFF, 0xFF, 0x00);
+    kernel_panic(0);
+    //kcharacterAstrisk(212+100, 100, 0xFF, 0xFF, 0xFF, 0x00);
+    //kcharacterA(101, 100, 0xFF, 0xFF, 0xFF, 0x00);
+    //drawline(50, 50, 0xFF, 0x00, 0x00, 0x00); // red line from (50,50) to (200,200)
     //print("MyOS kernel booted!\n");
     //if (!init_gdt());// kernel_panic(1);
     //print("GDT initialized.\n");

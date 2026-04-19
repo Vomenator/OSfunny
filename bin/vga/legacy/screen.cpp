@@ -6,12 +6,15 @@ int getcursor(){
     return cursor;
 }
 
+//check
 void clear_screen() {
     for (int i = 0; i < 80 * 25; i++)                                           // for 2000 pixels
         vga[i] = 0x07; // space, light gray on black, assimidly a color hex   // sets them to gray on black
     cursor = 0;                                                                 // cursor reset to 0, redundancy
 }
 
+
+//check
 void putchar(char c) {
     const unsigned short WHITE_ON_BLACK = 0x0F00;                               // sets color hex which is white on black shows 16 bit last 2 bits need to be 00
     if (c == '\n') {
