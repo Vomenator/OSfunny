@@ -20,7 +20,7 @@ void flushlinedchar(int wcount) {
 }
 
 void linestartC() {
-    print(">: ");
+    kernel::print(">: ");
 }
 
 
@@ -65,8 +65,8 @@ void input() {
 
 void commandprompt() {
     clear_screen();
-    print("\n");
+    kernel::print("\n");
     input();
     clear_screen();
-    print("goodbye!\n");
+    kernel::print("goodbye!\n");
 }

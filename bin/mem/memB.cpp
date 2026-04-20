@@ -51,13 +51,13 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     }
     memTRKalloc(INIT_STACK);
 
-    print("Memory Management Intialised. \n   ");
-    print(inttochar(memsize));
-    print(" MB total\n   ");
-    print(inttochar(freeMemory / Bsize::MB));
-    print(" KB free.\n   ");
-    print(inttochar((usedMemory) / Bsize::KB));
-    print( " KB used\n");
+    kernel::print("Memory Management Intialised. \n   ");
+    kernel::print(inttochar(memsize));
+    kernel::print(" MB total\n   ");
+    kernel::print(inttochar(freeMemory / Bsize::MB));
+    kernel::print(" KB free.\n   ");
+    kernel::print(inttochar((usedMemory) / Bsize::KB));
+    kernel::print( " KB used\n");
 
     // this sets the actual table which contains the addresses to particular "programs"
     //heapstart = 0x7f00000;                    // Example starting address for the heap (1 MB) out of 1280000
@@ -74,14 +74,14 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
     memoryBlocksHead->prev = NULL;
     heapEND = heapstart + sizeof(memoryBlocksHead);           // Set tail to the end of the memory region
     
-    print( "\nHEAP Memory Intialised.\n   ");
-    print(inttochar(heapsize / Bsize::KB));
-    print( " KB available for heap \n");
-    print( " heap is between: ");
-    print(inttochar(heapstart / Bsize::KB));
-    print( " KB and ");
-    print(inttochar(heapEND /Bsize::KB));
-    print( " KB used ");
+    kernel::print( "\nHEAP Memory Intialised.\n   ");
+    kernel::print(inttochar(heapsize / Bsize::KB));
+    kernel::print( " KB available for heap \n");
+    kernel::print( " heap is between: ");
+    kernel::print(inttochar(heapstart / Bsize::KB));
+    kernel::print( " KB and ");
+    kernel::print(inttochar(heapEND /Bsize::KB));
+    kernel::print( " KB used ");
 
     // Initialize memory management structures here
     // For example, set up a bitmap for tracking used/free memory blocks
@@ -117,21 +117,21 @@ void* kmemalloc(uint32_t size, uint32_t len) {
         }
         init = init->next;
     }
-    print("\n\n**WARNING** RAN OUT OF MEMORY\n\n");
+    kernel::print("\n\n**WARNING** RAN OUT OF MEMORY\n\n");
     return NULL;
 }
 
 
 void heap_dump() {
-    print("[HEAP] Dump:\n");
+    kernel::print("[HEAP] Dump:\n");
     HeapMemNode* dump = memoryBlocksHead;
     int i = 0;
     while (dump) {
-        print("  addr=");
-        print(inttochar((uint32_t)dump->address));
-        print("  size=");
-        print(inttochar(dump->size));
-        print((dump->isFree ? "FREE" : "USED"));
+        kernel::print("  addr=");
+        kernel::print(inttochar((uint32_t)dump->address));
+        kernel::print("  size=");
+        kernel::print(inttochar(dump->size));
+        kernel::print((dump->isFree ? "FREE" : "USED"));
         i++;
         dump = dump->next;
     }

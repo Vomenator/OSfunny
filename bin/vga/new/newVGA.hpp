@@ -2,13 +2,27 @@
 
 #include "../../types/kerneltypes.hpp"
 
+extern uint8_t SCREENPADDINGx;
+extern uint8_t SCREENPADDINGy;
+
+typedef struct colour{
+    char red;
+    char green;
+    char blue;
+    char alpha;
+} colour;
+
+
 namespace kernel {
+    void printM(const char* str, uint32_t x, uint32_t y, char red = 0xFF, char green = 0xFF, char blue = 0xFF, char alpha = 0x00);
+    void print(const char* str, colour col = colour{(char)0xFF, (char)0xFF, (char)0xFF, (char)0x00});
+
     class print {
     public:
         static uint32_t x_cursor, y_cursor;
 
         static void characterTest(uint32_t x, uint32_t y, char red, char green, char blue, char alpha);
-        static void charprintmatrix(char ascii, uint32_t x, uint32_t y, char red, char green, char blue, char alpha);
+        static bool charprintmatrix(char ascii, uint32_t x, uint32_t y, char red, char green, char blue, char alpha);
 
     private:
         static void kcharacterA(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
@@ -61,9 +75,6 @@ namespace kernel {
 void put_pixel(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
 bool VGAINIT(VBEModeInfo* vbe);
 int colourscreen(char red, char green, char blue);
-
-
-void print(const char* str, uint32_t x, uint32_t y, char red = 0xFF, char green = 0xFF, char blue = 0xFF, char alpha = 0x00);
 
 //VBE CHARACTERS FORWARD DECLARATIONS
 

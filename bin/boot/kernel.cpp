@@ -1,37 +1,38 @@
 //#include "../vga/legacy/screen.hpp"
 #include "../types/kerneltypes.hpp"
-//#include "../mem/memB.hpp"
+#include "../mem/memB.hpp"
 #include "../vga/new/newVGA.hpp"
 
 
 //uint16_t* fb;
 
-uint8_t SCREENPADDING = 8; // this is the padding between the edge of the screen and the start of the text, in pixels
+ // this is the padding between the edge of the screen and the start of the text, in pixels
+
 
 void kernel_panic(uint32_t error) {
     //clear_screen();
-    print("********************", SCREENPADDING, 5, 0xFF, 0x00, 0x00, 0x00); // red color
-    print("****KERNEL PANIC****", SCREENPADDING, 6, 0xFF, 0x00, 0x00, 0x00);
-    print("********************", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+    kernel::print("\n\n********************", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00}); // red color
+    kernel::print("\n****KERNEL PANIC****", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
+    kernel::print("\n********************", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
 
     switch(error) {
         case 0:
-            print("**UKNOWN ERROR**", SCREENPADDING, 9, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**UKNOWN ERROR**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00}); // red color
             break;
         case 1:
-            print("**GDT INITALISATION ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**GDT INITALISATION ERROR**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
             break;
         case 2:
-            print("**MEMORY INITALISATION ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**MEMORY INITALISATION ERROR**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
             break;
         case 3:
-            print("**HEAP ALLOCATION FAULT**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**HEAP ALLOCATION FAULT**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
             break;
         case 4:
-            print("**VGA MODE ERROR**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**VGA MODE ERROR**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
             break;
         case 5:
-            print("**framebufferflag not set**", SCREENPADDING, 7, 0xFF, 0x00, 0x00, 0x00);
+            kernel::print("\n\n**framebufferflag not set**", colour{(char)0xFF, (char)0x00, (char)0x00, (char)0x00});
             break;
     }
     for(;;) __asm__ volatile("hlt");
@@ -85,18 +86,21 @@ extern "C" void kmain(multiboot_info* mb) {
     //colourscreen(0, 0, 255); // blue screen
     //put_pixel(100, 100, 0xFF, 0x00, 0x00); // red pixel at 100,100
     //kcharacterA(100, 100, 0xFF, 0xFF, 0xFF, 0x00); // white 'A' at 100,100 also 0x00 was added cuz intelisense is smoking something
-    //kernel::print::characterTest(100, 100, 0xFF, 0xFF, 0xFF, 0x00);
-    print("MyOS kernel booted!", SCREENPADDING, 2, 0xFF, 0xFF, 0xFF, 0x00);
-    kernel_panic(0);
+    kernel::print::characterTest(8, 8, 0xFF, 0xFF, 0xFF, 0x00);
+    kernel::printM("\nMyOS kernel booted!", SCREENPADDINGx, 2, 0xFF, 0xFF, 0xFF, 0x00);
+    kernel::print("\nTHIS IS ANOTHER LINE");
+    kernel::print("\nand another one!");
+    //kernel::print("this is getting cumbersome", SCREENPADDINGx, 5, 0xFF, 0x00, 0xFF, 0x00); broken on y coords
+    kernel::print("\nthis is getting cumbersome in blue", colour{(char)0x00, (char)0x00, (char)0xFF, (char)0x00});
+    //kernel_panic(0);
     //kcharacterAstrisk(212+100, 100, 0xFF, 0xFF, 0xFF, 0x00);
     //kcharacterA(101, 100, 0xFF, 0xFF, 0xFF, 0x00);
     //drawline(50, 50, 0xFF, 0x00, 0x00, 0x00); // red line from (50,50) to (200,200)
-    //print("MyOS kernel booted!\n");
-    //if (!init_gdt());// kernel_panic(1);
-    //print("GDT initialized.\n");
-    //print("\n");
+    if (init_gdt() == false); kernel_panic(1);
+    kernel::print("GDT initialized.\n");
+    //kernel::print("\n");
     //tempColourOutput(8);
-    //if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
+    if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
     //if(kmemalloc(100, 1))
     // initialises the commandprompt function
     //commandprompt();

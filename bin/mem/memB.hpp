@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../types/kerneltypes.hpp"
-#include "../vga/legacy/screen.hpp"
 #include "../types/string.hpp"
+#include "../vga/new/newVGA.hpp"
 
 //memory values
 extern uint32_t usedMemory;

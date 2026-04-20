@@ -29,25 +29,25 @@ void hexdump(const void* data, size_t size, int width = 2) {
     const uint8_t* byteData = static_cast<const uint8_t*>(data);
     for (size_t i = 0; i < size; i += 16) {
         // Print the offset
-        print(inttohexAddr(i));
-        print(": ");
+        kernel::print(inttohexAddr(i));
+        kernel::print(": ");
 
         // Print the hex values
         for (size_t j = 0; j < 16*width && i + j < size; ++j) {
             char* out = inttohex(byteData[i + j]);
             if (strcmp(out, "00") != 0) {
-                print(out);
-                print(" ");
+                kernel::print(out);
+                kernel::print(" ");
             }
         }
-        print("\n");
+        kernel::print("\n");
 
         /*// Print the ASCII representation
-        print(" ");
+        kernel::print(" ");
         for (size_t j = 0; j < 16 && i + j < size; ++j) {
             char c = byteData[i + j];
-            print((c >= 32 && c <= 126) ? &c : ".");
+            kernel::print((c >= 32 && c <= 126) ? &c : ".");
         }
-        print("\n");*/
+        kernel::print("\n");*/
     }
 }
