@@ -56,6 +56,8 @@ namespace kernel {
         static void kcharacterAstrisk(uint32_t x,uint32_t y,char red,char green,char blue,char alpha=0x00);
         static void kcharacterEXCLAMATION(uint32_t x,uint32_t y,char red,char green,char blue,char alpha=0x00);
         static void kcharacterEMPTY(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
+        static void kernclearcharacter(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
+        static void kerncharacterUnderscore(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
 
         //numbers
         static void kcharacter0(uint32_t x,uint32_t y,char red,char green,char blue,char alpha=0x00);
@@ -74,7 +76,10 @@ namespace kernel {
 //foward declarations
 void put_pixel(uint32_t x, uint32_t y, char red, char green, char blue, char alpha = 0x00);
 bool VGAINIT(VBEModeInfo* vbe);
-int colourscreen(char red, char green, char blue);
+int colourscreen(char red, char green, char blue, char alpha = 0);
+uint32_t getcursor();
+
+void clear_screen();     //depreacted function i.e remenant from screen.cpp 
 
 //VBE CHARACTERS FORWARD DECLARATIONS
 

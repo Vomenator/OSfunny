@@ -27,7 +27,7 @@ void put_pixel(uint32_t x, uint32_t y, char red, char green, char blue, char alp
 }
 
 
-int colourscreen(char red, char green, char blue) {
+int colourscreen(char red, char green, char blue, char alpha) {
     // fill entire screen with specified color
     for (uint32_t y = 0; y < vbe->Yres; y++) {
         for (uint32_t x = 0; x < vbe->Xres; x++) {
@@ -35,6 +35,28 @@ int colourscreen(char red, char green, char blue) {
         }
     }
     return 0;
+}
+
+void overridecursor(uint32_t xvar, uint32_t yvar) {
+    //xcur = 0;
+    //ycur = 0;
+
+    for(int i = 0; xvar > 0 && i < xvar; i++) {
+        //xcur+= 8;
+    }
+    for(int i = 0; yvar > 0 && i < yvar; i++) {
+        //ycur+= 8;
+    }
+}
+
+uint32_t getcursor() {
+    uint32_t xcursor = kernel::print::x_cursor/8;
+    return xcursor;
+}
+
+void clear_screen() {
+    kernel::print::x_cursor = 0, kernel::print::y_cursor = 0;     
+    colourscreen(0,0,0, 0);
 }
 
 bool kernel::print::charprintmatrix(char ascii, uint32_t x, uint32_t y, char red, char green, char blue, char alpha) {
@@ -78,6 +100,7 @@ bool kernel::print::charprintmatrix(char ascii, uint32_t x, uint32_t y, char red
 
         case '*': kernel::print::kcharacterAstrisk(x, y, red, green, blue, alpha); return true;
         case '!': kernel::print::kcharacterEXCLAMATION(x, y, red, green, blue, alpha); return true;
+        case '_': kernel::print::kerncharacterUnderscore(x, y, red, green, blue, alpha); return true;
         case ' ': return true;
 
         //ascii return sequences               8 is char size 1 is offset 
@@ -85,8 +108,10 @@ bool kernel::print::charprintmatrix(char ascii, uint32_t x, uint32_t y, char red
         case '\r':
         case '\t':
         case '\0': break;
+        
+        case 0x08: kernel::print::x_cursor -= 8; kernel::print::kernclearcharacter(kernel::print::x_cursor,y, 0, 0, 0); break;                               // this will be changed to some sort of backround character thing in the future
 
-        default: break; // ignore unsupported characters
+        default: kcharacterEXCLAMATION(x,y,red,green,blue,alpha); break; // ignore unsupported characters
     }
     return false;
 }
@@ -94,8 +119,8 @@ bool kernel::print::charprintmatrix(char ascii, uint32_t x, uint32_t y, char red
 void kernel::printM(const char* str, uint32_t x, uint32_t y, char red, char green, char blue, char alpha) {
     if (kernel::print::x_cursor <= x) kernel::print::x_cursor = x; // checks if the input is less than x to prevent overlap so if its already more it forgets about it type shit
     if (kernel::print::y_cursor <= y * 8) kernel::print::y_cursor = y * 8; // Assuming 8 pixels height for each character
-    if (kernel::print::x_cursor < SCREENPADDINGx) kernel::print::x_cursor = SCREENPADDINGx; // Ensure x_cursor does not go below padding
-    if (kernel::print::y_cursor < SCREENPADDINGy) kernel::print::y_cursor = SCREENPADDINGy; // Ensure y_cursor does not go below padding
+    if (kernel::print::x_cursor < SCREENPADDINGx) kernel::print::x_cursor = 1; // Ensure x_cursor does not go below padding
+    //if (kernel::print::y_cursor < SCREENPADDINGy) kernel::print::y_cursor = SCREENPADDINGy; // Ensure y_cursor does not go below padding
 
     int i = 0;
     while (str[i] != '\0') {
@@ -105,7 +130,7 @@ void kernel::printM(const char* str, uint32_t x, uint32_t y, char red, char gree
         }
         i++;
     }
-}
+}                               // this needs major rework printM, as this will be significantly outdated which is already is and is not behaving correctly
 
 void kernel::print(const char* str, colour col) {
     if (kernel::print::x_cursor < SCREENPADDINGx) kernel::print::x_cursor = SCREENPADDINGx; // Ensure x_cursor does not go below padding
@@ -115,8 +140,9 @@ void kernel::print(const char* str, colour col) {
     while (str[i] != '\0') {
         char currentchar = str[i];
         if (kernel::print::charprintmatrix(currentchar, kernel::print::x_cursor, kernel::print::y_cursor, col.red, col.green, col.blue, col.alpha) == true) {
-            kernel::print::x_cursor += 8; // Move to the next character position (assuming 8 pixels wide)
-        }
+            kernel::print::x_cursor += 8;
+        }                   // this needs a minor rework as i fear it wont take into consideration new line
         i++;
+        //updatecursor();           // this makes sure that the cursor is always updated appropiately
     }
 }

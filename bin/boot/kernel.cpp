@@ -83,7 +83,7 @@ extern "C" void kmain(multiboot_info* mb) {
     //if (mb->framebuffer_addr == 0) for(;;);
     VBEModeInfo* vbe = (VBEModeInfo*)mb->vbe_mode_info;
     VGAINIT(vbe);
-    //colourscreen(0, 0, 255); // blue screen
+    //colourscreen(0, 0, 0); // blue screen
     //put_pixel(100, 100, 0xFF, 0x00, 0x00); // red pixel at 100,100
     //kcharacterA(100, 100, 0xFF, 0xFF, 0xFF, 0x00); // white 'A' at 100,100 also 0x00 was added cuz intelisense is smoking something
     kernel::print::characterTest(8, 8, 0xFF, 0xFF, 0xFF, 0x00);
@@ -96,14 +96,15 @@ extern "C" void kmain(multiboot_info* mb) {
     //kcharacterAstrisk(212+100, 100, 0xFF, 0xFF, 0xFF, 0x00);
     //kcharacterA(101, 100, 0xFF, 0xFF, 0xFF, 0x00);
     //drawline(50, 50, 0xFF, 0x00, 0x00, 0x00); // red line from (50,50) to (200,200)
-    if (init_gdt() == false); kernel_panic(1);
-    kernel::print("GDT initialized.\n");
+    //if (init_gdt() == false); kernel_panic(1);
+    init_gdt();
+    kernel::print("\nGDT initialized.\n");
     //kernel::print("\n");
     //tempColourOutput(8);
-    if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
+    //if(!kmeminit(128, Bsize::MB)) kernel_panic(2); // Example: Initialize memory management with 128 MB
     //if(kmemalloc(100, 1))
     // initialises the commandprompt function
-    //commandprompt();
+    commandprompt();
     for(;;) __asm__ volatile("hlt");
     return;
 }

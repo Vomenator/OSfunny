@@ -92,7 +92,7 @@ bool kmeminit(uint32_t memsize, uint32_t Bunit) {
 void* kmemalloc(uint32_t size, uint32_t len) {
     size *= len;
     //print(inttochar(size));
-    if (!size) print("\n**warning**: invalid memory size\n"); return NULL;
+    if (!size) kernel::print("\n**warning**: invalid memory size\n"); return NULL;
     size = (size+3) & ~3;
     HeapMemNode* init = memoryBlocksHead;
 

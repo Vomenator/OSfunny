@@ -65,6 +65,51 @@ void kerncharacterEXCLAMATION(uint32_t x, uint32_t y, char red, char green, char
     }
 }
 
+void kernel::print::kernclearcharacter(uint32_t x, uint32_t y, char red, char green, char blue, char alpha) {
+    // Example: Draw a simple 8x8 pixel representation of the letter '9'
+    const uint16_t nine[8] = {
+        0b11111111,             //   this will clear screen             //bitmap orientation is 0b 0000 is the x coord and 0000 is the y coord 
+        0b11111111,             //               // ultimately making 0b00000000
+        0b11111111,             //              // values dont mean anything its just the drawing where each bit repersents a pixel on the screen so it follows a weird boundary system
+        0b11111111,             //               //
+        0b11111111,             //                 //
+        0b11111111,             //                //
+        0b11111111,             //             //
+        0b11111111              //  
+    };
+
+    for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            if (nine[j] & (1 << (7 - i))) { // Check if the bit is set
+                put_pixel(x + i, y + j, red, green, blue, alpha);
+            }
+        }
+    }
+}
+
+void kernel::print::kerncharacterUnderscore(uint32_t x, uint32_t y, char red, char green, char blue, char alpha) {      //so weird this one needs the class initaliser
+    // Example: Draw a simple 8x8 pixel representation of the letter '9'
+    const uint16_t nine[8] = {
+        0b00000000,             //   this will clear screen             //bitmap orientation is 0b 0000 is the x coord and 0000 is the y coord 
+        0b00000000,             //               // ultimately making 0b00000000
+        0b00000000,             //              // values dont mean anything its just the drawing where each bit repersents a pixel on the screen so it follows a weird boundary system
+        0b00000000,             //               //
+        0b00000000,             //                 //
+        0b00000000,             //                //
+        0b00000000,             //             //
+        0b01111110              //  
+    };
+
+    for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < 8; i++) {
+            if (nine[j] & (1 << (7 - i))) { // Check if the bit is set
+                put_pixel(x + i, y + j, red, green, blue, alpha);
+            }
+        }
+    }
+}
+
+
 // ---------------------------------------------- numbers ---------------------------------------------------------------
 
 
@@ -289,7 +334,6 @@ void kerncharacter9(uint32_t x, uint32_t y, char red, char green, char blue, cha
         }
     }
 }
-
 
 //---------------------------------------------------------------------- cspecial ---------------------------------------------------------------
 

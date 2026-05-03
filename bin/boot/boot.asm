@@ -42,6 +42,6 @@ _gdt_flush:
 section .bss
     align 4                                         ; this makes sure that the memory locations are aligned to 4 bytes, making it faster for the CPU to read and write
 kernel_stack:
-    resb 16384                             ; this reserves 16KB of space for the kernel stack, which is used for function calls and local variables
+    resb 163840                             ; this reserves 16KB of space for the kernel stack, which is used for function calls and local variables
     ;resb 1024 * 1600                             ; this reserves 16KB of space for the kernel stack, which is used for function calls and local variables
 stack_top:     ; This label points to the END of the reserved space

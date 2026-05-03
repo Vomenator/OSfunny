@@ -1,16 +1,5 @@
 #include "input.hpp"
 
-char getCinputCLI(int Pline, int linestart, int lineend) {                                  // this whole function is a mess pure spaghetti
-    //int Sline = (cursor%80) + 80*Pline;
-    int line = 79*Pline;
-    //int maxline = cursor - 80*line ;
-    for (int i = linestart; i < lineend; i++) {
-        //buffer[2] = {linedchar[i+line]};
-        stringstore(linedchar[i + line]);                                           // dont love this
-    }
-    return 'c';
-}
-
 void delay(long int count) {                    // this recieves input number up to 32 bits or 4 bytes long
     while (count--) {
          __asm__ volatile("nop");               // writes no operation code to CPU directly and tells compiler to leave this alone and not optimise it
@@ -44,7 +33,7 @@ char scancode_to_ascii(uint8_t scancode) {              // gets the scancode inp
     if (scancode >= sizeof(map.Sall)) return 0;     // if the scancode allowed is not within the scancode map returns 0
     if ((map.Sall[scancode].sentinel) != ';') return map.Sall[scancode].ascii; // else this will return the scancode value found within the table
     else {
-        return 0x39;
+        return 0x39;                                                                    // to be dismantled and repurposed later
     }
 }
 char scancode_to_hex(uint8_t scancode) {

@@ -6,8 +6,14 @@ int bufftrack = 0;
 char* outputinttochar;
 
 void stringstore(const char input) {
-    charstore[bufftrack] = input;
-    bufftrack++;
+    if (input != 0x08) {
+        charstore[bufftrack] = input;
+        bufftrack++;
+    }
+    else {
+        bufftrack--;
+        charstore[bufftrack] = '\0';
+    }
 }
 
 void stringstoreN(const char input) {
@@ -40,11 +46,12 @@ char* returnDstringBuffer(int newtrack, char ascii) {
         lopi++;
     }
     Tbuff[newtrack] = '\0';
-    if (lopi == 1) {
-        Tbuff[0] = 'f';
-        Tbuff[1] = '\0';
-    }
+    //if (lopi == 1) {
+    //    Tbuff[0] = 'f';
+    //    Tbuff[1] = '\0';
+    //}
     //print(returnstringBuffer());
+    //kernel::print(Tbuff);
     return Tbuff;
 }
 
@@ -91,6 +98,10 @@ int strcmp(const char* a, const char* b) {
         }
         return 0;
     }
+    //kernel::print(inttochar(lena));
+    //kernel::print("\n");
+    //kernel::print(inttochar(lenb));
+    //kernel_panic(0);
     return 1;
 }
 

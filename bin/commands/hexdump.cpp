@@ -13,7 +13,8 @@ char* inttohex(uint32_t value) {
     return hexBuffer;
 }
 
-char* inttohexAddr(uint32_t value) {
+char* inttohexAddr(uint32_t value, uint32_t startaddress) {
+    value += startaddress;
     static char hexBuffer[9]; // 8 characters for hex + null terminator
     const char* hexDigits = "0123456789ABCDEF";
     for (int i = 7; i >= 0; --i) {
@@ -25,20 +26,21 @@ char* inttohexAddr(uint32_t value) {
 }
 
 void hexdump(const void* data, size_t size, int width = 2) {
+    uint32_t startaddress = reinterpret_cast<uint32_t>(data);
     //uint16_t* ptr = static_cast<uint16_t*>(const_cast<void*>(data));
     const uint8_t* byteData = static_cast<const uint8_t*>(data);
     for (size_t i = 0; i < size; i += 16) {
         // Print the offset
-        kernel::print(inttohexAddr(i));
+        kernel::print(inttohexAddr(i, startaddress));
         kernel::print(": ");
 
         // Print the hex values
         for (size_t j = 0; j < 16*width && i + j < size; ++j) {
             char* out = inttohex(byteData[i + j]);
-            if (strcmp(out, "00") != 0) {
+            //if (strcmp(out, "00") != 0) {
                 kernel::print(out);
                 kernel::print(" ");
-            }
+           // }
         }
         kernel::print("\n");
 

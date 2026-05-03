@@ -28,8 +28,8 @@ int exit(int type) {
 
 inline void printCommand() {                                                                           // TO BE MOVED LATER, AS THIS NEED TO BE WITH ITS FAMILY <3
     //strcmp(returnstringBuffer(5, ' '), "-n");
-    if (strcmp(returnstringBuffer(5, '\0'), " ") == 0) return print("not enough args!\n");
-    if (strcmp(returnstringBuffer(6, ' '), "-n") == 0) return print("nirs\n");
+    if (strcmp(returnstringBuffer(5, '\0'), " ") == 0) return kernel::print("not enough args!\n");
+    if (strcmp(returnstringBuffer(6, ' '), "-n") == 0) return kernel::print("nirs\n");
     kernel::print("error use of print function\n");
 }
 
@@ -39,7 +39,10 @@ inline void hexdumpcommand() {                                                  
     if (strcmp(returnstringBuffer(8, ' '), "-S") == 0) {
         int start = 0;
     }
-    kernel::print("error use of hexdump function\n");
+    //hexdump((void*)0x7FFFFFF, 256); //0x100000
+    hexdump((void*)0x101000, 800); 
+    //kernel::print("error use of hexdump function\n");
+
 }
                                                                                         // will change this terrible system once file directories are existent, because then
 inline void getmeminfo() {                                                              // i can base it off file name and decentralise this process but it works for now
@@ -79,7 +82,7 @@ Command parsecommand(const char* input) {
 inline void commandCheck(const char* input) {
     switch(parsecommand(input)) {
         case CMD_IDENTIFY:
-            print("you dont pay me enough!\n");
+            kernel::print("you dont pay me enough!\n");
             break;
         case CMD_CLEAR:
             clear_screen();
@@ -88,7 +91,7 @@ inline void commandCheck(const char* input) {
             printCommand();
             break;
         case CMD_HELLO:
-            print("HI THERE!\n");
+            kernel::print("HI THERE!\n");
             break;
         case CMD_MEMINFO:
             getmeminfo();
@@ -104,7 +107,8 @@ inline void commandCheck(const char* input) {
             exit(0);
             break;
         default:
-            print("invalid command!\n");
+            kernel::print("invalid command!\n");
+            kernel::print(inttochar(sizeof(input)));
     }
     bufferclear();
 }

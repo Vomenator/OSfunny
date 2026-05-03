@@ -1,7 +1,7 @@
 #pragma once
 
 #include "kerneltypes.hpp"
-#include "../vga/legacy/screen.hpp"
+#include "../vga/new/newVGA.hpp"
 #include "../io/input.hpp"
 
 #define STRING_MAX 256

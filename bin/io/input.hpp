@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../types/kerneltypes.hpp"
-#include "../vga/legacy/screen.hpp"
+#include "../vga/new/newVGA.hpp"
 #include "../types/string.hpp"
 
 #define KEYBOARD_PORT 0x60              // port of keyboard input/output
